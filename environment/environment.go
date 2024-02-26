@@ -26,28 +26,8 @@ func InitEnv(pathEnv string) {
 		logrus.Fatal("Err:", err)
 	}
 
-	PostgresURLConn = getEnvOrPanic("DB_URL")
+	PostgresURLConn = getEnvOrPanic("DATABASE_URL")
 
-	HttpPort = ":" + getEnvOrPanic("HTTPLISTNER")
-
-	TelemetryGrpcPort = getEnvOrPanic("TELEMETRYAPI_PORTRPC")
-	TelemetryGrpcPort = ":" + TelemetryGrpcPort
-
-	PermGrpcPort = getEnvOrPanic("PERMISSION_RPCPORT")
-	PermGrpcPort = ":" + PermGrpcPort
-
-	GeoCodGrpcPort = getEnvOrPanic("GEOCODING_RPCPORT")
-	GeoCodGrpcPort = ":" + GeoCodGrpcPort
-
-	IntegrationSvcPort = getEnvOrPanic("INTEGRATIONSERV_PORT")
-	IntegrationSvcPort = ":" + IntegrationSvcPort
-
-	CoreGrpcServerPort = getEnvOrPanic("CORESERVER_RPCPORT")
-	CoreGrpcServerPort = ":" + CoreGrpcServerPort
-
-	Machine = getEnv("ENVIRONMENT")
-
-	fmt.Println(PostgresURLConn, HttpPort, Machine)
 }
 
 func getEnv(env string) string {

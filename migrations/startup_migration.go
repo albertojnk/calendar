@@ -8,10 +8,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func CreateDatabase(ctx context.Context, connString string) error {
+func CreateDatabase(connString string) error {
 
+	ctx := context.Background()
 	// Create a new connection pool
-	pool, err := pgxpool.New(context.Background(), connString)
+	pool, err := pgxpool.New(ctx, connString)
 	if err != nil {
 		logrus.Errorf("error connecting to db, %v", err)
 		return err
@@ -24,28 +25,12 @@ func CreateDatabase(ctx context.Context, connString string) error {
 		return err
 	}
 
-	// Create a new database (if needed)
-	_, err = tx.Exec(ctx, "CREATE DATABASE IF NOT EXISTS calendar")
-	if err != nil {
-		logrus.Errorf("error creating database, %v", err)
-		tx.Rollback(ctx)
-		return err
-	}
-
-	// Use the newly created database
-	_, err = tx.Exec(ctx, "USE calendar")
-	if err != nil {
-		logrus.Errorf("error using database, %v", err)
-		tx.Rollback(ctx)
-		return err
-	}
-
 	// Create tables within the database
 	_, err = tx.Exec(ctx, `
 		CREATE TABLE IF NOT EXISTS calendars (
 			id SERIAL PRIMARY KEY,
 			date timestamptz NOT NULL,
-			email text UNIQUE NOT NULL,
+			email text UNIQUE NOT NULL
 		)
 	 `)
 	if err != nil {
