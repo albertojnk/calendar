@@ -1,9 +1,11 @@
 package models
 
 type CalendarSchedule struct {
-	Weekday int
-	Start   string
-	Finish  string
+	ID         int
+	CalendarID int
+	Weekday    int
+	Start      int
+	Finish     int
 }
 
 type Calendar struct {

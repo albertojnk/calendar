@@ -1,0 +1,16 @@
+- login
+- cadastro de cliente/profissional
+
+- profissional
+    - nome
+    - documento
+    - email 2 auth google
+    - telefone
+    - agenda
+
+- agendamento
+    - salvar contato do cliente na agenda do profissional
+    
+
+- calendario
+

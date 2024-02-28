@@ -2,6 +2,8 @@ CREATE TABLE Users (
     user_id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
     email TEXT NOT NULL,
+    document_number BIGINT NOT NULL,
+    phone BIGINT NOT NULL,
     password_hash TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -25,18 +27,20 @@ CREATE TABLE Event_Participants (
     FOREIGN KEY (event_id) REFERENCES Events(event_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
-
-CREATE TYPE calendar_schedule AS (
-    weekday int,
-    start timestamptz,
-    finish timestamptz
+CREATE TABLE calendar_schedule (
+    schedule_id SERIAL PRIMARY KEY,
+    calendar_id INT,
+    weekday INT,
+    start_time INT,
+    finish_time INT,
+    FOREIGN KEY (calendar_id) REFERENCES Calendars(calendar_id) ON DELETE CASCADE
 );
+
 CREATE TABLE Calendars (
     calendar_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     calendar_name TEXT NOT NULL,
     color TEXT,
-    schedule calendar_schedule[],
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );

@@ -8,9 +8,10 @@ import (
 	"github.com/albertojnk/calendar/internal/models"
 )
 
-func createUser(ctx context.Context, username, email, passwordHash string) error {
-	_, err := postgres.GetDBX().Exec(ctx, "INSERT INTO Users (username, email, password_hash) VALUES ($1, $2, $3)",
-		username, email, passwordHash)
+
+func createUser(ctx context.Context,username, email string, documentNumber, phone int64, passwordHash string) error {
+	_, err := postgres.GetDBX().Exec(ctx, "INSERT INTO Users (username, email, document_number, phone, password_hash) VALUES ($1, $2, $3, $4, $5)",
+		username, email, documentNumber, phone, passwordHash)
 	if err != nil {
 		return err
 	}
@@ -20,15 +21,19 @@ func createUser(ctx context.Context, username, email, passwordHash string) error
 
 func getUserByID(ctx context.Context, userID int) (models.User, error) {
 	var user models.User
-	err := postgres.GetDBX().QueryRow(ctx, "SELECT user_id, username, email FROM Users WHERE user_id = $1", userID).Scan(&user.ID, &user.Username, &user.Email)
+	err := postgres.GetDBX().QueryRow(ctx, "SELECT user_id, username, email, document_number, phone, password_hash FROM Users WHERE user_id = $1", userID).Scan(
+		&user.ID, &user.Username, &user.Email, &user.DocumentNumber, &user.Phone, &user.PasswordHash,
+	)
 	if err != nil {
 		return user, err
 	}
 	return user, nil
 }
 
-func updateUser(ctx context.Context, userID int, username, email string) error {
-	_, err := postgres.GetDBX().Exec(ctx, "UPDATE Users SET username = $1, email = $2 WHERE user_id = $3", username, email, userID)
+func updateUser(ctx context.Context, userID int, username, email string, documentNumber, phone int64, passwordHash string) error {
+	_, err := postgres.GetDBX().Exec(ctx, "UPDATE Users SET username = $1, email = $2, document_number = $3, phone = $4, password_hash = $5 WHERE user_id = $6",
+		username, email, documentNumber, phone, passwordHash, userID,
+	)
 	if err != nil {
 		return err
 	}
